@@ -1,0 +1,18 @@
+name: 設定・適用相談
+description: ReVanced Manager、patches.json、XAPK統合について相談します
+title: "[Config]: "
+labels: [configuration]
+body:
+  - type: textarea
+    id: environment
+    attributes:
+      label: 環境と実施した手順
+    validations:
+      required: true
+  - type: textarea
+    id: error
+    attributes:
+      label: エラー全文
+      description: 秘密情報を除いてください。
+    validations:
+      required: true

@@ -1,0 +1,10 @@
+title: "[Q&A] "
+labels: []
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: 質問
+      description: アカウントや認証情報は記載しないでください。
+    validations:
+      required: true

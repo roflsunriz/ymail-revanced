@@ -1,2 +1,7 @@
 COMMON-AGENTS.md
 y!mail-apks/
+.analysis/
+.gradle/
+**/build/
+dist/
+local.properties

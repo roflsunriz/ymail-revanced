@@ -1,0 +1,12 @@
+patch:
+  - changed-files:
+      - any-glob-to-any-file: ['patches/**', 'extensions/**']
+documentation:
+  - changed-files:
+      - any-glob-to-any-file: ['**/*.md']
+ci:
+  - changed-files:
+      - any-glob-to-any-file: ['.github/workflows/**', 'gradle/**', '*.gradle.kts']
+tests:
+  - changed-files:
+      - any-glob-to-any-file: ['**/src/test/**']

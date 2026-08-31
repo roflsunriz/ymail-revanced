@@ -1,0 +1,30 @@
+name: バグ報告
+description: 広告残存、空白、通信、メール機能の退行を報告します
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: input
+    id: app-version
+    attributes:
+      label: Yahoo!メールのバージョン
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Android / ReVanced Manager / RVPのバージョン
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 再現手順
+      description: アカウント名、メール本文、認証情報は除いてください。
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期待する結果と実際の結果
+    validations:
+      required: true

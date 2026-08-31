@@ -1,0 +1,17 @@
+name: ドキュメント改善
+description: READMEや更新・検証手順の不足を報告します
+title: "[Docs]: "
+labels: [documentation]
+body:
+  - type: input
+    id: page
+    attributes:
+      label: 対象ページ
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 問題と改善案
+    validations:
+      required: true
