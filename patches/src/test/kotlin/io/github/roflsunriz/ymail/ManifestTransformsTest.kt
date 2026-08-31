@@ -12,7 +12,7 @@ import org.w3c.dom.Element
 
 class ManifestTransformsTest {
     @Test
-    fun `removes ad permissions and registrars while preserving push messaging`() {
+    fun `removes ad permissions while preserving Firebase components required at startup`() {
         val document = parse(
             """
             <manifest xmlns:android="http://schemas.android.com/apk/res/android">
@@ -23,6 +23,7 @@ class ManifestTransformsTest {
                     <service android:name="com.google.firebase.messaging.FirebaseMessagingService" />
                     <service android:name="com.google.firebase.components.ComponentDiscoveryService">
                         <meta-data android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar" android:value="com.google.firebase.components.ComponentRegistrar" />
+                        <meta-data android:name="com.google.firebase.components:com.google.firebase.crashlytics.CrashlyticsRegistrar" android:value="com.google.firebase.components.ComponentRegistrar" />
                         <meta-data android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingRegistrar" android:value="com.google.firebase.components.ComponentRegistrar" />
                     </service>
                 </application>
@@ -42,7 +43,8 @@ class ManifestTransformsTest {
         assertNotNull(providers.firstOrNull { it.getAttribute("android:name") == "app.revanced.extension.ymail.BootstrapProvider" })
 
         val metadata = document.elements("meta-data").map { it.getAttribute("android:name") }
-        assertFalse(metadata.any { it.contains("AnalyticsConnectorRegistrar") })
+        assertTrue(metadata.any { it.contains("AnalyticsConnectorRegistrar") })
+        assertTrue(metadata.any { it.contains("CrashlyticsRegistrar") })
         assertTrue(metadata.any { it.contains("FirebaseMessagingRegistrar") })
         assertTrue(metadata.contains("firebase_analytics_collection_deactivated"))
     }

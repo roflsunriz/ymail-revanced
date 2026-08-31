@@ -25,6 +25,10 @@ Gradle 9.7.1の`--warning-mode all`では、最新のReVanced patches plugin `v1
 | 有効な広告／Adjust／Billingコンポーネント | 各0件 |
 | 広告・販促レイアウト | 全対象で`0dp, 0dp, gone` |
 
+### v0.1.1 起動修正
+
+v0.1.0を新規インストールした実機では、Yahoo!メール本体が起動時に`FirebaseCrashlytics.getInstance()`を呼ぶ一方、パッチがCrashlytics Registrarを削除していたため`FirebaseCrashlytics component is not present`でクラッシュした。v0.1.1ではFirebase Registrarを維持し、collectionフラグとDEXネットワーク境界で広告計測通信を遮断する。Manifest変換テストへAnalytics、Crashlytics、Messaging Registrarの維持を追加した。
+
 ## Android ReVanced Manager
 
 SH-R80P（Android 16、1260×2730、480dpi）で次を確認しました。

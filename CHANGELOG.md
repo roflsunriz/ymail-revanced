@@ -6,9 +6,15 @@
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-08-31
+
 ### Changed
 
 - CIと依存更新PRを安定させるため、JUnit JupiterとPlatform Launcherを整合する6.1.3へ同時更新し、Gradle wrapperを9.7.1、actions/labelerを7へ更新した。
+
+### Fixed
+
+- Yahoo!メール本体が起動時にCrashlyticsを取得してもクラッシュしないように、Firebase Registrarは維持し、collection無効化とDEXネットワーク境界遮断で通信を止める方式へ修正した。
 
 ## [0.1.0] - 2026-08-31
 
@@ -21,5 +27,6 @@
 - Android ReVanced Managerで配布物を利用できるように、Android用DEXと拡張RVEを含むRVP、ReVanced API形式`patches.json`、ビルド／リリースワークフローを追加した。
 - バージョン差による退行を防ぐため、6.1.1、6.2.5、6.2.18の単一APK化・実適用・署名・リソース変換を検証する手順を追加した。
 
-[Unreleased]: https://github.com/roflsunriz/ymail-revanced/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/roflsunriz/ymail-revanced/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/roflsunriz/ymail-revanced/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/roflsunriz/ymail-revanced/releases/tag/v0.1.0

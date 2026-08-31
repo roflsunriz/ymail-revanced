@@ -59,8 +59,7 @@ internal fun Document.removeAdvertisingSurfaces() {
         val name = element.getAttribute("android:name")
         name == "com.google.android.gms.ads.APPLICATION_ID" ||
             name.startsWith("com.google.android.gms.ads.flag.") ||
-            name == "com.google.android.play.billingclient.version" ||
-            TargetClassifier.isBlockedFirebaseRegistrar(name)
+            name == "com.google.android.play.billingclient.version"
     }
 
     mapOf(

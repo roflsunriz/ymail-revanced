@@ -122,8 +122,4 @@ internal object TargetClassifier {
 
     fun isBlockedPermission(permission: String): Boolean = permission in blockedPermissions
 
-    fun isBlockedFirebaseRegistrar(name: String): Boolean =
-        name.contains("firebase.analytics.connector", ignoreCase = true) ||
-            name.contains("firebase.crashlytics", ignoreCase = true) ||
-            name.contains("firebase.sessions", ignoreCase = true)
 }
