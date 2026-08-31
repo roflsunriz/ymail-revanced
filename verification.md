@@ -8,6 +8,8 @@
 - 広告権限と広告／計測Registrarだけを除去し、Firebase Messagingを維持する
 - 販促専用メソッドだけを停止し、通常通知を扱うdispatcherを維持する
 
+Gradle 9.7.1の`--warning-mode all`では、最新のReVanced patches plugin `v1.0.0-dev.11`が旧Project依存表記を使うというGradle 10向け警告が1件出ます。公式タグに新しい修正版がないことを確認済みで、Gradle 9.7.1のビルド・テスト・lint・RVP生成は成功します。Gradle 10へは上流修正後に更新します。
+
 ## 2026-08-31 実測
 
 | 項目 | 結果 |

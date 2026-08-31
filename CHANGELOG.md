@@ -6,6 +6,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- CIと依存更新PRを安定させるため、JUnit JupiterとPlatform Launcherを整合する6.1.3へ同時更新し、Gradle wrapperを9.7.1、actions/labelerを7へ更新した。
+
 ## [0.1.0] - 2026-08-31
 
 ### Added
