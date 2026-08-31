@@ -6,6 +6,13 @@
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-08-31
+
+### Fixed
+
+- ログイン後のメール一覧で広告行データバインディングがnullテーマを参照しないように、void APIの無効化をGoogle Adsの初期化／読込とAdjustの明示送信APIだけへ限定し、Yahoo!メール独自広告Viewのsetterを維持した。
+- ドロワーの毎日くじ案内`incentive_cognition`とGmail追加案内`guide_imap_login`がData Bindingで再表示されないように、専用レイアウトとinclude先を幅・高さ0へ変換し、実行時には拘束条件を保つ0サイズのプレースホルダーへ置換した。
+
 ## [0.1.2] - 2026-08-31
 
 ### Fixed
@@ -33,7 +40,8 @@
 - Android ReVanced Managerで配布物を利用できるように、Android用DEXと拡張RVEを含むRVP、ReVanced API形式`patches.json`、ビルド／リリースワークフローを追加した。
 - バージョン差による退行を防ぐため、6.1.1、6.2.5、6.2.18の単一APK化・実適用・署名・リソース変換を検証する手順を追加した。
 
-[Unreleased]: https://github.com/roflsunriz/ymail-revanced/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/roflsunriz/ymail-revanced/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/roflsunriz/ymail-revanced/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/roflsunriz/ymail-revanced/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/roflsunriz/ymail-revanced/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/roflsunriz/ymail-revanced/releases/tag/v0.1.0

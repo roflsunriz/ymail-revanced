@@ -5,13 +5,18 @@ import android.app.Application;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
 
 public final class AdViewCollapser implements Application.ActivityLifecycleCallbacks {
+    private static final Object PLACEHOLDER_TAG = new Object();
+
     private static final Map<Application, AdViewCollapser> INSTANCES =
             Collections.synchronizedMap(new WeakHashMap<>());
 
@@ -65,8 +70,13 @@ public final class AdViewCollapser implements Application.ActivityLifecycleCallb
     }
 
     private static void collapseRecursively(View view) {
+        if (view.getTag() == PLACEHOLDER_TAG) return;
         if (isBlockedView(view)) {
-            collapse(view);
+            if (TargetViewClassifier.shouldDetachPromotion(resourceName(view))) {
+                detachWithPlaceholder(view);
+            } else {
+                collapse(view);
+            }
             return;
         }
         if (view instanceof ViewGroup) {
@@ -79,16 +89,72 @@ public final class AdViewCollapser implements Application.ActivityLifecycleCallb
 
     private static boolean isBlockedView(View view) {
         if (TargetViewClassifier.isBlockedViewClass(view.getClass().getName())) return true;
-        if (view.getId() == View.NO_ID) return false;
+        String resourceName = resourceName(view);
+        if (TargetViewClassifier.isBlockedResourceName(resourceName)) return true;
+        if (!(view instanceof ViewGroup)) return false;
+
+        Set<String> childNames = new HashSet<>();
+        ViewGroup group = (ViewGroup) view;
+        for (int index = 0; index < group.getChildCount(); index++) {
+            String childName = resourceName(group.getChildAt(index));
+            if (childName != null) childNames.add(childName);
+        }
+        Set<String> ancestorNames = new HashSet<>();
+        ViewParent parent = view.getParent();
+        while (parent instanceof View) {
+            String ancestorName = resourceName((View) parent);
+            if (ancestorName != null) ancestorNames.add(ancestorName);
+            parent = parent.getParent();
+        }
+        return TargetViewClassifier.isBlockedHierarchy(resourceName, ancestorNames, childNames);
+    }
+
+    private static String resourceName(View view) {
+        if (view.getId() == View.NO_ID) return null;
         try {
-            return TargetViewClassifier.isBlockedResourceName(
-                    view.getResources().getResourceEntryName(view.getId()));
+            return view.getResources().getResourceEntryName(view.getId());
         } catch (RuntimeException ignored) {
-            return false;
+            return null;
         }
     }
 
     private static void collapse(View view) {
+        ViewGroup.LayoutParams params = view.getLayoutParams();
+        if (params != null) {
+            boolean layoutChanged = params.width != 0 || params.height != 0;
+            params.width = 0;
+            params.height = 0;
+            if (params instanceof ViewGroup.MarginLayoutParams) {
+                ViewGroup.MarginLayoutParams margins = (ViewGroup.MarginLayoutParams) params;
+                layoutChanged |= margins.leftMargin != 0 || margins.topMargin != 0
+                        || margins.rightMargin != 0 || margins.bottomMargin != 0;
+                margins.setMargins(0, 0, 0, 0);
+            }
+            if (layoutChanged) view.setLayoutParams(params);
+        }
+        if (view.getMinimumWidth() != 0) view.setMinimumWidth(0);
+        if (view.getMinimumHeight() != 0) view.setMinimumHeight(0);
+        if (view.getPaddingLeft() != 0 || view.getPaddingTop() != 0
+                || view.getPaddingRight() != 0 || view.getPaddingBottom() != 0) {
+            view.setPadding(0, 0, 0, 0);
+        }
+        if (view.getVisibility() != View.GONE) view.setVisibility(View.GONE);
+    }
+
+    private static void detachWithPlaceholder(View view) {
+        ViewParent parent = view.getParent();
+        if (!(parent instanceof ViewGroup)) {
+            collapse(view);
+            return;
+        }
+
+        ViewGroup group = (ViewGroup) parent;
+        int index = group.indexOfChild(view);
+        if (index < 0) {
+            collapse(view);
+            return;
+        }
+
         ViewGroup.LayoutParams params = view.getLayoutParams();
         if (params != null) {
             params.width = 0;
@@ -96,12 +162,19 @@ public final class AdViewCollapser implements Application.ActivityLifecycleCallb
             if (params instanceof ViewGroup.MarginLayoutParams) {
                 ((ViewGroup.MarginLayoutParams) params).setMargins(0, 0, 0, 0);
             }
-            view.setLayoutParams(params);
         }
-        view.setMinimumWidth(0);
-        view.setMinimumHeight(0);
-        view.setPadding(0, 0, 0, 0);
-        view.setVisibility(View.GONE);
+
+        View placeholder = new View(view.getContext());
+        placeholder.setId(view.getId());
+        placeholder.setTag(PLACEHOLDER_TAG);
+        placeholder.setVisibility(View.GONE);
+        group.removeViewAt(index);
+        view.setId(View.NO_ID);
+        if (params == null) {
+            group.addView(placeholder, index, new ViewGroup.LayoutParams(0, 0));
+        } else {
+            group.addView(placeholder, index, params);
+        }
     }
 
     @Override public void onActivityStarted(Activity activity) { }

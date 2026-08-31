@@ -8,7 +8,6 @@ class NetworkBoundaryPatchTest {
     @Test
     fun `void advertising SDK calls are disabled`() {
         assertTrue(shouldNoOpSdkCall("Lcom/google/android/gms/ads/AdView;", "loadAd", "V"))
-        assertTrue(shouldNoOpSdkCall("Ljp/co/yahoo/android/ads/YJIIconInlineView;", "show", "V"))
         assertTrue(shouldNoOpSdkCall("Lcom/adjust/sdk/Adjust;", "trackEvent", "V"))
     }
 
@@ -18,6 +17,8 @@ class NetworkBoundaryPatchTest {
         assertFalse(shouldNoOpSdkCall("Lcom/google/android/gms/ads/AdLoader;", "builder", "Ljava/lang/Object;"))
         assertFalse(shouldNoOpSdkCall("Lcom/google/firebase/sessions/FirebaseSessionsRegistrar;", "configure", "V"))
         assertFalse(shouldNoOpSdkCall("Lcom/google/firebase/crashlytics/FirebaseCrashlytics;", "setCollectionEnabled", "V"))
+        assertFalse(shouldNoOpSdkCall("Ljp/co/yahoo/android/ymail/adsdk/AdView;", "setAdTheme", "V"))
+        assertFalse(shouldNoOpSdkCall("Ljp/co/yahoo/android/ads/YJIIconInlineView;", "show", "V"))
         assertFalse(shouldNoOpSdkCall("Ljp/co/yahoo/android/ymail/MailApi;", "sync", "V"))
     }
 }

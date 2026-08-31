@@ -85,7 +85,22 @@ private fun networkRewrite(
 }
 
 internal fun shouldNoOpSdkCall(definingClass: String, name: String, returnType: String): Boolean =
-    name != "<init>" && returnType == "V" && TargetClassifier.isDisabledSdkApiDescriptor(definingClass)
+    returnType == "V" && when {
+        definingClass.startsWith("Lcom/google/android/gms/ads/") ||
+            definingClass.startsWith("Lcom/google/ads/") ->
+            name in setOf("initialize", "loadAd", "loadAds", "preload")
+        definingClass.startsWith("Lcom/adjust/sdk/") ->
+            name in setOf(
+                "trackEvent",
+                "trackAdRevenue",
+                "trackPlayStoreSubscription",
+                "trackThirdPartySharing",
+                "gdprForgetMe",
+                "disableThirdPartySharing",
+                "sendFirstPackages",
+            )
+        else -> false
+    }
 
 private fun stringUrlRewrite(
     index: Int,

@@ -6,17 +6,34 @@ import java.util.Locale;
 import java.util.Set;
 
 public final class TargetViewClassifier {
+    private static final Set<String> DETACHED_PROMOTION_RESOURCE_NAMES = new HashSet<>(Arrays.asList(
+            "banner",
+            "drawer_banner",
+            "footer_banner",
+            "guide_imap_login",
+            "guide_switch_gmail_account",
+            "incentive_cognition",
+            "side_bar_list_user_training_pr_container",
+            "target_text_position"
+    ));
+
     private static final Set<String> EXACT_RESOURCE_NAMES = new HashSet<>(Arrays.asList(
+            "banner",
             "detail_ad_shadow",
             "detail_footer_ad",
             "divider_lyp_premium_setting_above",
             "drawer_banner",
             "footer_banner",
+            "guide_imap_login",
+            "guide_switch_gmail_account",
+            "incentive_cognition",
             "layout_lyp_premium_aware_container",
             "lyp_premium_benefit_setting_container",
             "lyp_premium_icon",
             "lyp_premium_registration_setting_container",
             "mail_list_ad_view_container",
+            "side_bar_list_user_training_pr_container",
+            "target_text_position",
             "target_promotion_position"
     ));
 
@@ -73,5 +90,27 @@ public final class TargetViewClassifier {
             if (className.contains(fragment)) return true;
         }
         return false;
+    }
+
+    public static boolean shouldDetachPromotion(String resourceName) {
+        return resourceName != null && DETACHED_PROMOTION_RESOURCE_NAMES.contains(
+                resourceName.toLowerCase(Locale.ROOT));
+    }
+
+    public static boolean isBlockedHierarchy(
+            String resourceName,
+            Set<String> ancestorResourceNames,
+            Set<String> directChildResourceNames) {
+        if (directChildResourceNames.contains("banner_image")
+                && directChildResourceNames.contains("banner_close_button")) {
+            return true;
+        }
+        if (directChildResourceNames.contains("sidebar_icon")
+                && directChildResourceNames.contains("body_text")
+                && directChildResourceNames.contains("close_button")) {
+            return true;
+        }
+        return "guide_container".equals(resourceName)
+                && ancestorResourceNames.contains("drawer_items");
     }
 }

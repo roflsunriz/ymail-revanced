@@ -33,6 +33,14 @@ v0.1.0を新規インストールした実機では、Yahoo!メール本体が�
 
 v0.1.1ではFirebase Registrarを復元した一方、広告計測SDKとして分類したFirebase Sessions内部のvoidメソッドまで`nop`化し、`DaggerFirebaseSessionsComponent`のProviderが未初期化になった。v0.1.2では全面`nop`化を広告SDKとAdjustだけへ限定し、Firebase Sessions／Crashlyticsのvoid APIを維持する回帰テストを追加した。
 
+### v0.1.3 メール一覧修正
+
+v0.1.2でログイン後にメール一覧を開くと、Yahoo!メール独自`AdView.setAdTheme()`まで広告SDKのvoid APIとして`nop`化され、広告行データバインディングがnullテーマを参照してクラッシュした。v0.1.3では直接無効化するAPIをGoogle Adsの`initialize/loadAd`系とAdjustの明示送信APIだけへ限定し、独自広告ViewとYahoo!広告SDKのsetterを維持する回帰テストを追加した。
+
+メール一覧の広告行は消えて空白なく詰まったが、ドロワーの毎日くじ案内`incentive_cognition`とGmail追加案内`guide_imap_login`はData Bindingが可視性と寸法を繰り返し戻して再表示した。v0.1.3では各専用レイアウトとinclude先を幅・高さ0へ変換し、実行時には元ビューを拘束条件付きの0サイズプレースホルダーへ置換してData Bindingによる再表示を遮断する。`banner`、`target_text_position`、`guide_switch_gmail_account`と旧世代の`side_bar_list_target_text_position_item`も同じ方式で除去し、通常機能の`calendar_banner_body`とメール一覧ガイドは除外する。
+
+SH-R80Pのログイン済み環境で、受信箱の広告行が空白なく消えること、本文下部の広告IDがUI階層に存在しないこと、ドロワー先頭から毎日くじとGmail案内が消えて「アカウント」へ詰まること、設定のLYP Premium誘導が消えることを目視確認した。メール本文の開閉、設定の全体スクロール、受信箱の更新後にも広告枠は再表示されず、`FATAL EXCEPTION`は発生しなかった。広告SDKの対象ホストは`UnknownHostException`で名前解決前に遮断され、外部接続は成立しなかった。
+
 ## Android ReVanced Manager
 
 SH-R80P（Android 16、1260×2730、480dpi）で次を確認しました。
@@ -44,7 +52,7 @@ SH-R80P（Android 16、1260×2730、480dpi）で次を確認しました。
 - Manager生成APKをストレージへ保存し、PCへ取得
 - システムの更新確認画面まで到達
 
-公式版とManager生成APKの署名が異なるため、ADB上書きは`INSTALL_FAILED_UPDATE_INCOMPATIBLE`で拒否されました。端末は非rootでmount方式も使えないため、既存データを保護してアンインストールは実施していません。このため、パッチ版を起動した実画面の目視確認は、同一署名の旧パッチ版またはデータ移行を許可した検証環境で継続します。
+初回は公式版とManager生成APKの署名差により`INSTALL_FAILED_UPDATE_INCOMPATIBLE`になった。その後、ユーザー許可の下で公式版をアンインストールし、Manager生成の6.2.18パッチ版を新規インストールしてログインした。以降はManagerのBKS署名キーを維持し、最終v0.1.3も同じ署名で上書きしたため、ログインデータを保ったまま受信箱、本文、ドロワー、設定、更新操作を実画面で確認できた。
 
 ## 手動確認項目
 

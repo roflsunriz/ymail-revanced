@@ -3,6 +3,10 @@ package io.github.roflsunriz.ymail
 internal object TargetClassifier {
     private val collapsedLayouts = setOf(
         "drawer_banner_item",
+        "drawer_incentive_layout",
+        "drawer_target_text_position_item",
+        "guide_imap_login",
+        "guide_switch_gmail_account",
         "lyp_premium_aware_dialog",
         "mail_list_ad",
         "mail_list_ad_empty",
@@ -19,6 +23,7 @@ internal object TargetClassifier {
         "message_list_ad_muted",
         "offline_ads_dialog",
         "renewal_lyp_premium_aware_dialog",
+        "side_bar_list_target_text_position_item",
         "target_promotion_position",
         "ymail_promotion_image_dialog",
         "ymail_promotion_web_view_dialog",
@@ -27,16 +32,22 @@ internal object TargetClassifier {
     )
 
     private val exactResourceNames = setOf(
+        "banner",
         "detail_ad_shadow",
         "detail_footer_ad",
         "divider_lyp_premium_setting_above",
         "drawer_banner",
         "footer_banner",
+        "guide_imap_login",
+        "guide_switch_gmail_account",
+        "incentive_cognition",
         "layout_lyp_premium_aware_container",
         "lyp_premium_benefit_setting_container",
         "lyp_premium_icon",
         "lyp_premium_registration_setting_container",
         "mail_list_ad_view_container",
+        "side_bar_list_user_training_pr_container",
+        "target_text_position",
         "target_promotion_position",
     )
 
@@ -92,16 +103,6 @@ internal object TargetClassifier {
         "Ljp/co/yahoo/android/ymail/googlead/",
     )
 
-    private val disabledSdkApiDescriptors = listOf(
-        "Lcom/adjust/sdk/",
-        "Lcom/google/ads/",
-        "Lcom/google/android/gms/ads/",
-        "Lcom/google/android/gms/internal/ads/",
-        "Ljp/co/yahoo/android/ads/",
-        "Ljp/co/yahoo/android/ymail/adsdk/",
-        "Ljp/co/yahoo/android/ymail/googlead/",
-    )
-
     private val blockedPermissions = setOf(
         "android.permission.ACCESS_ADSERVICES_AD_ID",
         "android.permission.ACCESS_ADSERVICES_ATTRIBUTION",
@@ -129,9 +130,6 @@ internal object TargetClassifier {
 
     fun isBlockedSdkDescriptor(descriptor: String): Boolean =
         blockedSdkDescriptors.any(descriptor::startsWith)
-
-    fun isDisabledSdkApiDescriptor(descriptor: String): Boolean =
-        disabledSdkApiDescriptors.any(descriptor::startsWith)
 
     fun isBlockedPermission(permission: String): Boolean = permission in blockedPermissions
 
