@@ -25,6 +25,23 @@ Gradle 9.7.1の`--warning-mode all`では、最新のReVanced patches plugin `v1
 | 有効な広告／Adjust／Billingコンポーネント | 各0件 |
 | 広告・販促レイアウト | 全対象で`0dp, 0dp, gone` |
 
+## 2026-09-01 Pixel 10a ABI互換性
+
+Pixel 10a（Android 17、`arm64-v8a`のみ、16KBページ）で、`config.armeabi_v7a.apk`だけを含む6.2.18 XAPKから生成したv0.1.3適用APKは、Package Installerが`INSTALL_FAILED_NO_MATCHING_ABIS`（native library抽出失敗、`res=-113`）として拒否した。APKEditorやAnti Split Mによる単一APK化はCPU ABIを変換しないため、この入力はPixel 10aに対応しない。
+
+`config.arm64_v8a.apk`を含む6.2.5 XAPKを単一化し、同じv0.1.3 RVPを`--force`なしで適用したAPKについて、次を確認した。
+
+- `native-code: 'arm64-v8a'`
+- minSdk 26、targetSdk 35
+- APK Signature Scheme v2/v3検証成功
+- `zipalign -c -P 16 -v 4`成功
+- 全native libraryのELF `LOAD` alignmentが`0x4000`（16KB）
+- Pixel 10aのReVanced Managerでも同じarm64入力への適用・保存が完走し、Managerの既存BKS署名鍵、APK Signature Scheme v2/v3、16KB ZIP alignmentを維持
+- Manager署名版のインストール成功、インストール後の`primaryCpuAbi=arm64-v8a`
+- Yahoo!ログイン画面まで起動し、`FATAL EXCEPTION`、`UnsatisfiedLinkError`、`dlopen failed`なし
+
+最新版6.2.18にも`arm64-v8a`バリアントが存在するため、Pixel 10aではそのバリアントを取得して単一APK化する。端末とAPKのABIは`verify-apk-abi.ps1`でパッチ前後に照合する。
+
 ### v0.1.1 起動修正
 
 v0.1.0を新規インストールした実機では、Yahoo!メール本体が起動時に`FirebaseCrashlytics.getInstance()`を呼ぶ一方、パッチがCrashlytics Registrarを削除していたため`FirebaseCrashlytics component is not present`でクラッシュした。v0.1.1ではFirebase Registrarを維持し、collectionフラグとDEXネットワーク境界で広告計測通信を遮断する。Manifest変換テストへAnalytics、Crashlytics、Messaging Registrarの維持を追加した。

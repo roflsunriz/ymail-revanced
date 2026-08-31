@@ -29,6 +29,14 @@ https://raw.githubusercontent.com/roflsunriz/ymail-revanced/main/patches.json
 
 APKPureなどのXAPKは分割APKです。PCでは[APKEditor](https://github.com/REAndroid/APKEditor)の`merge`、AndroidではAnti Split Mなどを使い、先に単一APKへ変換してください。
 
+元XAPKは端末のCPUに合うバリアントを選んでください。Pixel 10aなど`arm64-v8a`専用端末では、XAPK内に`config.arm64_v8a.apk`が必要です。`config.armeabi_v7a.apk`しかないXAPKを単一APK化しても64-bit版にはならず、インストール時に「お使いのデバイスに対応していません」と表示されます。APKEditorの出力名に`universal`と付けても、不足しているABIは追加されません。
+
+ADB接続した端末とのABI互換性は、パッチ前後のAPKに対して次のように確認できます。
+
+```powershell
+.\scripts\verify-apk-abi.ps1 -Path '.\work\ymail-VERSION-patched.apk' -DeviceSerial 'ADB_SERIAL'
+```
+
 ### 既存アプリを更新できない場合
 
 公式Yahoo!メールとReVanced Manager生成APKでは署名が異なるため、通常のAndroidでは`INSTALL_FAILED_UPDATE_INCOMPATIBLE`となり、公式版へ上書きできません。既存データを消さずに無理に回避しないでください。
@@ -36,6 +44,10 @@ APKPureなどのXAPKは分割APKです。PCでは[APKEditor](https://github.com/
 - 同じReVanced署名鍵で作った旧パッチ版からは更新できます。
 - 公式版から移行する場合は、Yahoo!メール側で同期状態と再ログイン手段を確認し、必要なデータを保護してから公式版をアンインストールします。
 - root環境ではReVancedのmount方式を利用できる場合があります。
+
+### 「お使いのデバイスに対応していません」と表示される場合
+
+署名差ではなく、元XAPKのCPU ABIが端末と合っていない可能性があります。Pixel 10aでは`arm64-v8a`版のXAPKを取り直し、Anti Split MまたはAPKEditorで再度単一APK化してからパッチしてください。`armeabi-v7a`だけを含む生成済みAPKは使用できません。
 
 ## 除去するもの
 

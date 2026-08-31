@@ -21,10 +21,19 @@ git tag --sort=-version:refname
 ## 2. XAPKを単一APK化
 
 ```powershell
-java -jar APKEditor.jar merge -i '.\y!mail-apks\Yahoo!+Mail_VERSION.xapk' -o '.\work\ymail-VERSION-universal.apk' -f -validate-modules
+java -jar APKEditor.jar merge -i '.\y!mail-apks\Yahoo!+Mail_VERSION.xapk' -o '.\work\ymail-VERSION-merged.apk' -f -validate-modules
 ```
 
-APKEditorの公式リリースに掲載されたSHA-256とローカルファイルを照合します。
+APKEditorの公式リリースに掲載されたSHA-256とローカルファイルを照合します。`merge`はXAPK内のsplitを1ファイルへまとめるだけで、不足しているCPU ABIを追加しません。検証端末に合うXAPKバリアント（64-bit専用端末なら`config.arm64_v8a.apk`を含むもの）を取得します。
+
+単一APK化の直後とパッチ適用後の両方で、実機ABIとの一致を確認します。複数端末が接続されている場合は、対象のADB serialを必ず明示します。
+
+```powershell
+.\scripts\verify-apk-abi.ps1 -Path '.\work\ymail-VERSION-merged.apk' -DeviceSerial 'ADB_SERIAL'
+.\scripts\verify-apk-abi.ps1 -Path '.\work\ymail-VERSION-patched.apk' -DeviceSerial 'ADB_SERIAL'
+```
+
+`INSTALL_FAILED_NO_MATCHING_ABIS`になる組み合わせはパッチ対象に使用せず、正しいXAPKバリアントを取り直します。
 
 ## 3. SDK・リソース差分を確認
 
@@ -52,6 +61,7 @@ $env:ORG_GRADLE_PROJECT_githubPackagesPassword = 'your-token'
 各単一APKへ公式ReVanced CLIでRVPを適用し、`--force`なしで全世代が成功することを確認します。適用後は次を確認します。
 
 - APK署名検証が成功する
+- APK内のCPU ABIが検証端末と一致する
 - 広告関連権限が0件
 - 広告／Adjust／Billingコンポーネントの有効残存が0件
 - `BootstrapProvider`が1件
