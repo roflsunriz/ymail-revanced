@@ -6,6 +6,12 @@
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-08-31
+
+### Fixed
+
+- Firebase SessionsのDaggerコンポーネントを壊さず起動できるように、void APIの全面無効化対象をGoogle／Yahoo!広告SDKとAdjustだけへ限定し、Firebaseはcollection無効化とネットワーク境界遮断で通信を止める方式へ修正した。
+
 ## [0.1.1] - 2026-08-31
 
 ### Changed
@@ -27,6 +33,7 @@
 - Android ReVanced Managerで配布物を利用できるように、Android用DEXと拡張RVEを含むRVP、ReVanced API形式`patches.json`、ビルド／リリースワークフローを追加した。
 - バージョン差による退行を防ぐため、6.1.1、6.2.5、6.2.18の単一APK化・実適用・署名・リソース変換を検証する手順を追加した。
 
-[Unreleased]: https://github.com/roflsunriz/ymail-revanced/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/roflsunriz/ymail-revanced/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/roflsunriz/ymail-revanced/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/roflsunriz/ymail-revanced/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/roflsunriz/ymail-revanced/releases/tag/v0.1.0

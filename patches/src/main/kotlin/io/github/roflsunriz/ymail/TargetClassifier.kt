@@ -92,6 +92,16 @@ internal object TargetClassifier {
         "Ljp/co/yahoo/android/ymail/googlead/",
     )
 
+    private val disabledSdkApiDescriptors = listOf(
+        "Lcom/adjust/sdk/",
+        "Lcom/google/ads/",
+        "Lcom/google/android/gms/ads/",
+        "Lcom/google/android/gms/internal/ads/",
+        "Ljp/co/yahoo/android/ads/",
+        "Ljp/co/yahoo/android/ymail/adsdk/",
+        "Ljp/co/yahoo/android/ymail/googlead/",
+    )
+
     private val blockedPermissions = setOf(
         "android.permission.ACCESS_ADSERVICES_AD_ID",
         "android.permission.ACCESS_ADSERVICES_ATTRIBUTION",
@@ -119,6 +129,9 @@ internal object TargetClassifier {
 
     fun isBlockedSdkDescriptor(descriptor: String): Boolean =
         blockedSdkDescriptors.any(descriptor::startsWith)
+
+    fun isDisabledSdkApiDescriptor(descriptor: String): Boolean =
+        disabledSdkApiDescriptors.any(descriptor::startsWith)
 
     fun isBlockedPermission(permission: String): Boolean = permission in blockedPermissions
 

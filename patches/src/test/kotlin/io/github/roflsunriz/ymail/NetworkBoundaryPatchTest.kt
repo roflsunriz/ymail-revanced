@@ -16,6 +16,8 @@ class NetworkBoundaryPatchTest {
     fun `constructors return values and mail APIs are preserved`() {
         assertFalse(shouldNoOpSdkCall("Lcom/google/android/gms/ads/AdView;", "<init>", "V"))
         assertFalse(shouldNoOpSdkCall("Lcom/google/android/gms/ads/AdLoader;", "builder", "Ljava/lang/Object;"))
+        assertFalse(shouldNoOpSdkCall("Lcom/google/firebase/sessions/FirebaseSessionsRegistrar;", "configure", "V"))
+        assertFalse(shouldNoOpSdkCall("Lcom/google/firebase/crashlytics/FirebaseCrashlytics;", "setCollectionEnabled", "V"))
         assertFalse(shouldNoOpSdkCall("Ljp/co/yahoo/android/ymail/MailApi;", "sync", "V"))
     }
 }

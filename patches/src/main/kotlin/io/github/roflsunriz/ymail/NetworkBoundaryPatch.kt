@@ -85,7 +85,7 @@ private fun networkRewrite(
 }
 
 internal fun shouldNoOpSdkCall(definingClass: String, name: String, returnType: String): Boolean =
-    name != "<init>" && returnType == "V" && TargetClassifier.isBlockedSdkDescriptor(definingClass)
+    name != "<init>" && returnType == "V" && TargetClassifier.isDisabledSdkApiDescriptor(definingClass)
 
 private fun stringUrlRewrite(
     index: Int,
