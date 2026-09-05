@@ -5,8 +5,22 @@
 - 広告ホスト判定がYahoo!メール本体の`mail.yahoo.co.jp`を誤遮断しない
 - 広告／販促リソースを幅0、高さ0、余白0、`gone`へ変換する
 - メールの「プロモーション」分類リソースを維持する
-- 広告権限と広告／計測Registrarだけを除去し、Firebase Messagingを維持する
+- 広告権限を除去し、FirebaseのAnalytics／Crashlytics／Messaging Registrarを維持する
 - 販促専用メソッドだけを停止し、通常通知を扱うdispatcherを維持する
+- 広告コンテナのDEXを書き出して読み直し、選択時に行の寸法を復帰されても測定寸法0を維持し、通常ビューへ影響しない
+- WebViewのsuper呼び出し（通常／range、ヘッダーあり／なし）はURL引数だけを変換し、通常の仮想呼び出しへ置換しない
+
+## 2026-09-05 Pixel 10a 回帰調査
+
+- インストール済み6.2.5で全選択・解除を録画し、解除時にメール行が一時的に上下移動することを確認した。
+- 元APKの広告モデルは選択モードを内容比較に含み、再bindで広告行の高さを通常メール相当に復帰する。アプリが測定した後に`OnGlobalLayout`で0へ戻す競合を防ぐため、広告コンテナの`onMeasure`で0×0を維持する。
+- 6.1.1／6.2.5／6.2.18の元DEXに対象広告コンテナが存在し、RelativeLayout継承、既存`onMeasure`なしを確認した。全3世代への修正版RVP適用は`--force`なしで成功した。
+- Google Ads WebViewの`super.loadUrl`を拡張ラッパーへ置換すると、overrideがRunnableを再投入し続ける経路を確認した。super命令を残し、URL引数だけを遮断用に変換する修正を追加した。
+- 未読メールを開く間欠クラッシュはユーザー報告。調査開始時のPixel 10aのcrashバッファにはYahoo!メールの例外が残っておらず、取得できた終了履歴はタスク削除だった。上記WebView不具合と報告されたクラッシュの因果関係は未確定であり、クラッシュ解決済みとは扱わない。
+- `test lint :patches:buildAndroid`、RVPのDEX検証、6.2.5のPixel 10a ABI照合は成功。認証情報・ネットワークを使わず、既存Gradleキャッシュと`--offline -PgithubPackagesUsername=offline -PgithubPackagesPassword=offline`で検証した。
+- 自動テストはパッチ15件、拡張6件が全件成功。CLI生成3世代のAPK署名を検証し、広告コンテナの0×0測定とGoogle Adsのsuper呼び出し維持を出力DEXでも確認した。
+- Pixel 10aのManager 2.6.0で検証版`0.1.4-dev.1`を6.2.5のarm64元APKへ適用し、保存・署名まで成功した。保存APKのDEXで0×0測定を1件、Google Adsの保護済みsuper呼び出しを2件確認した。署名はインストール済み版と一致し、ABI照合と16KB ZIP alignmentも成功した。
+- 検証APK: `ymail-6.2.5-regression-manager.apk`、SHA-256 `2990b0700a1f9e2802a4cc50a10b2d1868b8d6b4290e124195f52d6421776203`。上書きインストール承認待ちのため、修正後の全選択・単独選択、本文開閉、間欠クラッシュは実機未検証。
 
 Gradle 9.7.1の`--warning-mode all`では、最新のReVanced patches plugin `v1.0.0-dev.11`が旧Project依存表記を使うというGradle 10向け警告が1件出ます。公式タグに新しい修正版がないことを確認済みで、Gradle 9.7.1のビルド・テスト・lint・RVP生成は成功します。Gradle 10へは上流修正後に更新します。
 
@@ -73,6 +87,8 @@ SH-R80P（Android 16、1260×2730、480dpi）で次を確認しました。
 
 ## 手動確認項目
 
+- 全選択・解除、単独選択・解除を繰り返して広告行相当の上下バウンスがない
+- 未読メールの初回表示、本文から一覧への復帰、次の未読表示を繰り返し、クラッシュ時は時刻と`AndroidRuntime`ログを取得する
 - メール一覧の広告行が消え、前後のメールが空白なく詰まる
 - メール本文下部の広告枠と影が消える
 - ドロワー／旧サイドバーのバナーが消える

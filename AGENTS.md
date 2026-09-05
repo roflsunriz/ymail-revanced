@@ -16,3 +16,10 @@ Get-Content -Raw -LiteralPath .\COMMON-AGENTS.md
 ## 目的
 - Yahoo! Mail(ID:jp.co.yahoo.android.ymail)アプリ用のReVanced patchを作る
 - 広告を除去する
+
+## 広告除去の回帰調査
+
+- `MailListAdViewContainer`は選択モード変更時の再bindで広告行の高さと可視性が復帰する。`OnGlobalLayout`での再collapseだけでは一覧の移動アニメーションを防げないため、`AdViewLayoutPatch.kt`で測定寸法を0に保つ。6.1.1、6.2.5、6.2.18の元DEXで同じクラスとRelativeLayout継承を確認した。通常メールのアニメーションは変更しない。
+- ネットワーク境界の`WebView.loadUrl`書き換えでは`invoke-super`を維持する。仮想呼び出しを行う拡張ラッパーへ置換すると広告WebViewのoverrideへ再入し、Google AdsではRunnableを再投入し続け得る。URL引数だけを変換し、通常呼び出しとsuper/rangeを別途テストする。
+- 実機のクラッシュ履歴が空でも、ユーザーが報告した間欠クラッシュを否定しない。修正候補と原因確定を区別し、詳細は`verification.md`へ記録する。
+- Managerへ同名・同バージョンのローカルRVPを追加すると公開版と別ソースとして並び、両方が選択され得る。検証版は1ソースだけを選び、保存APKのDEXに修正が含まれることを確認してからインストールする。表示順だけで修正版と判断しない。

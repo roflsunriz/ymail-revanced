@@ -12,6 +12,7 @@ val yMailPatch = bytecodePatch(
     extendWith("extensions/ymail.rve")
 
     apply {
+        patchAdViewLayouts()
         patchNetworkBoundaries()
         patchPromotionNotifications()
     }

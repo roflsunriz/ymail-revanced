@@ -56,6 +56,12 @@ $env:ORG_GRADLE_PROJECT_githubPackagesPassword = 'your-token'
 .\scripts\verify-android-rvp.ps1 -Path .\patches\build\libs\patches-VERSION.rvp
 ```
 
+公開前の実機検証では、同名の公開RVPと取り違えないよう、バージョンを区別して生成します（PowerShellでは`-P`引数全体を引用符で囲みます）。Managerへ追加した後は、その検証版だけを選びます。
+
+```powershell
+.\gradlew.bat clean test lint :patches:buildAndroid '-Pversion=0.1.4-dev.1'
+```
+
 ## 5. 複数世代へ実適用
 
 各単一APKへ公式ReVanced CLIでRVPを適用し、`--force`なしで全世代が成功することを確認します。適用後は次を確認します。
@@ -76,6 +82,14 @@ $env:ORG_GRADLE_PROJECT_githubPackagesPassword = 'your-token'
 4. 同じ署名の旧パッチ版へ上書きし、起動、メール一覧、本文、ドロワー、設定画面を確認する。
 5. 広告枠が消え、上下の内容が詰まっていることをスクリーンショットとUI階層で確認する。
 6. 広告／Adjust／広告計測ホストへの通信がないことを確認する。
+
+回帰検証では全選択・解除と単独選択・解除を録画し、広告行の高さが一時復帰しないことも確認します。未読メールの初回表示と一覧への復帰を繰り返し、間欠クラッシュは再現時刻と次のログを保存します。再現しなかったことだけで解決済みと判断しません。
+
+```powershell
+adb -s ADB_SERIAL logcat -b crash -d -v threadtime
+```
+
+ログと録画には個人情報が含まれる場合があるため、Git管理外で扱い、共有前に内容を確認します。
 
 公式版とは署名が異なるため、データ保護を確認せずアンインストールしません。
 

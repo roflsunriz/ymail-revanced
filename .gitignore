@@ -5,3 +5,4 @@ y!mail-apks/
 **/build/
 dist/
 local.properties
+subagents/
