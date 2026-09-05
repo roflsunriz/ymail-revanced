@@ -13,7 +13,7 @@ import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 private const val AD_BLOCKER = "Lapp/revanced/extension/ymail/AdBlocker;"
 private const val EXTENSION_PREFIX = "Lapp/revanced/extension/ymail/"
 
-private sealed class NetworkRewrite(open val index: Int) {
+internal sealed class NetworkRewrite(open val index: Int) {
     data class Replace(override val index: Int, val smali: String) : NetworkRewrite(index)
     data class Insert(override val index: Int, val smali: String) : NetworkRewrite(index)
 }
@@ -40,7 +40,7 @@ internal fun BytecodePatchContext.patchNetworkBoundaries() {
     )
 }
 
-private fun networkRewrite(
+internal fun networkRewrite(
     index: Int,
     instruction: Instruction,
     reference: MethodReference,
@@ -52,6 +52,14 @@ private fun networkRewrite(
 
     val registers = instruction.argumentRegisters() ?: return null
     val signature = reference.toString()
+
+    // A virtual wrapper would dispatch back into an overriding WebView.loadUrl.
+    // Keep the original super call and sanitize only its URL argument.
+    if (instruction.opcode in setOf(Opcode.INVOKE_SUPER, Opcode.INVOKE_SUPER_RANGE) &&
+        reference.definingClass == "Landroid/webkit/WebView;" && reference.name == "loadUrl"
+    ) {
+        return stringUrlRewrite(index, instruction, reference, registers, blockAll)
+    }
 
     return when (signature) {
         "Ljava/net/InetAddress;->getAllByName(Ljava/lang/String;)[Ljava/net/InetAddress;" ->
@@ -114,6 +122,8 @@ private fun stringUrlRewrite(
             reference.parameterTypes.firstOrNull()?.toString() == "Ljava/lang/String;" -> 0
         reference.definingClass == "Ljava/net/URI;" && reference.name == "create" -> 0
         reference.definingClass.startsWith("Lokhttp3/HttpUrl") &&
+            reference.parameterTypes.firstOrNull()?.toString() == "Ljava/lang/String;" -> 0
+        reference.definingClass == "Landroid/webkit/WebView;" && reference.name == "loadUrl" &&
             reference.parameterTypes.firstOrNull()?.toString() == "Ljava/lang/String;" -> 0
         reference.name in setOf("url", "newUrlRequestBuilder", "postUrl", "loadDataWithBaseURL") &&
             reference.parameterTypes.firstOrNull()?.toString() == "Ljava/lang/String;" -> 0
