@@ -74,7 +74,7 @@ $env:ANDROID_HOME = 'C:\path\to\Android\Sdk'
 $env:ORG_GRADLE_PROJECT_githubPackagesUsername = 'your-name'
 $env:ORG_GRADLE_PROJECT_githubPackagesPassword = 'your-token'
 .\gradlew.bat clean test lint :patches:buildAndroid
-.\scripts\verify-android-rvp.ps1 -Path .\patches\build\libs\patches-0.1.3.rvp
+.\scripts\verify-android-rvp.ps1 -Path .\patches\build\libs\patches-0.1.4.rvp
 ```
 
 詳しい更新・検証方法は[how-to-update.md](how-to-update.md)と[verification.md](verification.md)を参照してください。

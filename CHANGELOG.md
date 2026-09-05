@@ -6,6 +6,8 @@
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-09-06
+
 ### Fixed
 
 - メールの全選択・単独選択の切り替えで広告行の高さが一時復帰しないよう、広告コンテナの測定寸法を0に固定した。Pixel 10aの6.2.5へ上書きし、選択操作の録画で確認した。
@@ -46,7 +48,8 @@
 - Android ReVanced Managerで配布物を利用できるように、Android用DEXと拡張RVEを含むRVP、ReVanced API形式`patches.json`、ビルド／リリースワークフローを追加した。
 - バージョン差による退行を防ぐため、6.1.1、6.2.5、6.2.18の単一APK化・実適用・署名・リソース変換を検証する手順を追加した。
 
-[Unreleased]: https://github.com/roflsunriz/ymail-revanced/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/roflsunriz/ymail-revanced/compare/v0.1.4...HEAD
+[0.1.4]: https://github.com/roflsunriz/ymail-revanced/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/roflsunriz/ymail-revanced/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/roflsunriz/ymail-revanced/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/roflsunriz/ymail-revanced/compare/v0.1.0...v0.1.1

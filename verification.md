@@ -30,6 +30,12 @@
 - 別の既読メール2件も本文表示・一覧復帰に成功した。本文下部の広告枠・影はUI階層に表示されなかった。
 - 一連の操作中、Yahoo!メールのプロセスIDは変わらず、crashバッファに同アプリの新しい例外は記録されなかった。ただし自然受信した未読メールでの間欠クラッシュは再現できておらず、原因確定・長期的な解消の確認には至っていない。
 
+## 2026-09-06 v0.1.4 リリース前検証
+
+- OSV-Scanner 2.5.1でパッチと拡張のGradle lockfile（計242依存エントリ）を監査し、既知脆弱性の指摘なし。settingsのlockfileは依存エントリなしだった。
+- 正式バージョンで`clean test lint :patches:buildAndroid`とAndroid RVP検証が成功した。実機検証に使用した`0.1.4-dev.1` RVPと、正式版RVPの実行コード（`.class`、DEX、RVEの計15エントリ）のSHA-256がすべて一致した。
+- `patches.json`を生成スクリプトで0.1.4へ更新し、CHANGELOGからリリースノートを抽出した。既存のv0.1.0〜v0.1.3にはRVPと`patches.json`がすべて添付されていた。
+
 Gradle 9.7.1の`--warning-mode all`では、最新のReVanced patches plugin `v1.0.0-dev.11`が旧Project依存表記を使うというGradle 10向け警告が1件出ます。公式タグに新しい修正版がないことを確認済みで、Gradle 9.7.1のビルド・テスト・lint・RVP生成は成功します。Gradle 10へは上流修正後に更新します。
 
 ## 2026-08-31 実測
