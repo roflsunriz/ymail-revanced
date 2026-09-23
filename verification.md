@@ -109,3 +109,9 @@ SH-R80P（Android 16、1260×2730、480dpi）で次を確認しました。
 - 設定のLYP Premium誘導と販促ダイアログが消える
 - 通常の新着メール通知とメール「プロモーション」分類が動作する
 - 広告／Adjust／広告計測ホストへ通信しない
+
+## Dependabot 自動処理（2026-09-23）
+
+`.github/workflows/dependabot-automation.yml` を actionlint で検査し、PR 用 workflow 名（Build）と一致することを確認する。Dependabot の patch／minor かつ全 PR チェック成功の場合だけ取り込み、major・古い SHA・再失敗は残す。
+
+実際の Dependabot PR がまだない場合、動作経路は未検証として扱う。実 PR 発生後に自動化ジョブ、CI の再試行、マージ結果を確認する。
