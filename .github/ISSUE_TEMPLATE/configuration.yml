@@ -1,8 +1,24 @@
-name: 設定・適用相談
+name: 設定・互換性の相談
 description: ReVanced Manager、patches.json、XAPK統合について相談します
-title: "[Config]: "
-labels: [configuration]
+title: '[Config] '
+labels:
+  - configuration
 body:
+  - type: markdown
+    attributes:
+      value: |-
+        設定・適用方法と、期待した結果・実際の結果を共有してください。
+        導入・利用・開発方法は [README](https://github.com/roflsunriz/ymail-revanced/blob/HEAD/README.md) を確認してください。
+        本文と添付に秘密情報や個人情報を含めないでください。脆弱性の詳細は公開せず、[セキュリティ方針](https://github.com/roflsunriz/ymail-revanced/blob/HEAD/SECURITY.md) を確認してください。
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: 事前確認
+      options:
+        - label: 同じ内容の既存Issueを検索しました。
+          required: true
+        - label: READMEと関連する利用・更新手順を確認しました。
+          required: true
   - type: textarea
     id: environment
     attributes:
@@ -16,3 +32,20 @@ body:
       description: 秘密情報を除いてください。
     validations:
       required: true
+  - type: textarea
+    id: expected-result
+    attributes:
+      label: 期待した結果
+    validations:
+      required: true
+  - type: textarea
+    id: additional
+    attributes:
+      label: 補足
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: 公開情報の確認
+      options:
+        - label: 本文・ログ・画像・添付から、認証情報、Cookie、トークン、秘密鍵、個人情報を除いたことを確認しました。
+          required: true
