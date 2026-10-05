@@ -39,7 +39,7 @@ ADB接続した端末とのABI互換性は、パッチ前後のAPKに対して�
 
 ### 既存アプリを更新できない場合
 
-公式Yahoo!メールとReVanced Manager生成APKでは署名が異なるため、通常のAndroidでは`INSTALL_FAILED_UPDATE_INCOMPATIBLE`となり、公式版へ上書きできません。既存データを消さずに無理に回避しないでください。
+公式Yahoo!メールとReVanced Manager生成APKでは署名が異なるため、通常のAndroidでは、公式版へ上書きしようとすると`INSTALL_FAILED_UPDATE_INCOMPATIBLE`で失敗します。既存データを消さずに無理に回避しないでください。
 
 - 同じReVanced署名鍵で作った旧パッチ版からは更新できます。
 - 公式版から移行する場合は、Yahoo!メール側で同期状態と再ログイン手段を確認し、必要なデータを保護してから公式版をアンインストールします。
@@ -63,7 +63,7 @@ ADB接続した端末とのABI互換性は、パッチ前後のAPKに対して�
 
 ## 開発
 
-必要なもの:
+開発には次のものが必要です。
 
 - JDK 21以上
 - Android SDK
