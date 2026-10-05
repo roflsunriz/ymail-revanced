@@ -23,3 +23,8 @@ Get-Content -Raw -LiteralPath .\COMMON-AGENTS.md
 - ネットワーク境界の`WebView.loadUrl`書き換えでは`invoke-super`を維持する。仮想呼び出しを行う拡張ラッパーへ置換すると広告WebViewのoverrideへ再入し、Google AdsではRunnableを再投入し続け得る。URL引数だけを変換し、通常呼び出しとsuper/rangeを別途テストする。
 - 実機のクラッシュ履歴が空でも、ユーザーが報告した間欠クラッシュを否定しない。修正候補と原因確定を区別し、詳細は`verification.md`へ記録する。
 - Managerへ同名・同バージョンのローカルRVPを追加すると公開版と別ソースとして並び、両方が選択され得る。検証版は1ソースだけを選び、保存APKのDEXに修正が含まれることを確認してからインストールする。表示順だけで修正版と判断しない。
+
+
+## Dependabotラベルの運用
+
+- 明示指定のラベルはDependabotが自動初期化するとは限らない。既定ブランチの設定を正本とする専用workflowで不足分だけ維持する。検証と復旧は `how-to-update.md` のDependabotラベル節、回帰は `.github/tests/test-dependabot-labels.py`。既存の自動マージ・承認は別のworkflowであり、ラベルの変更で回避しない。

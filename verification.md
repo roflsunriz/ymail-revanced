@@ -126,3 +126,7 @@ SH-R80P（Android 16、1260×2730、480dpi）で次を確認しました。
 - 既存のCI、Dependabot、labeler、ライセンスのファイル内容は比較元から変更していない。
 - 製品のビルド・インストール・実機操作、GitHub上のフォーム表示、公開後CIは今回の静的検証に含めない。公開後に実際の受付表示と必要ラベルの適用を確認する。
 - 公開前に確認する不足ラベル: `configuration`, `patch`, `tests`。既存ラベルの削除・上書きはしない。
+
+## Dependabotラベル再発防止の統合（2026-10-05、公開前）
+
+別タスクで用意した未公開パッチのworkflow・試験・AGENTS・更新手順を統合した。既存文書整備の変更履歴と検証記録を保って追記した。`python .github/tests/test-dependabot-labels.py` は成功。workflowはPR上で読み取り専用試験を実行し、ラベル作成jobはownerがroflsunrizかつ既定ブランチの場合だけ実行する。既存ラベルの色・説明の上書き、PRコードのcheckout、秘密情報の追加はない。GitHub Actionsでの実行結果は公開後に記録する。
