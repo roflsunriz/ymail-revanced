@@ -61,28 +61,11 @@ ADB接続した端末とのABI互換性は、パッチ前後のAPKに対して�
 
 広告枠は静的リソースと実行時の両方で幅・高さ・余白を0にし、`gone`へ変更します。広告SDKはManifestで無効化し、DEXのDNS、URL接続、WebView、URLビルダー境界でも遮断します。
 
-## 開発
-
-開発には次のものが必要です。
-
-- JDK 21以上
-- Android SDK
-- GitHub Packagesを読めるGitHubトークン
-
-```powershell
-$env:ANDROID_HOME = 'C:\path\to\Android\Sdk'
-$env:ORG_GRADLE_PROJECT_githubPackagesUsername = 'your-name'
-$env:ORG_GRADLE_PROJECT_githubPackagesPassword = 'your-token'
-.\gradlew.bat clean test lint :patches:buildAndroid
-.\scripts\verify-android-rvp.ps1 -Path .\patches\build\libs\patches-0.1.4.rvp
-```
-
-詳しい更新・検証方法は[how-to-update.md](how-to-update.md)と[verification.md](verification.md)を参照してください。
-
 ## ライセンス
 
 [MIT License](LICENSE)
 
-## 依存更新の自動処理
 
-Dependabot は対象の依存関係を毎週確認します。patch／minor 更新は PR のチェック（Build）が成功した後に自動で squash merge されます。CI の失敗ジョブは 1 回だけ再実行します。再失敗した PR は残して手動で修正します。major 更新は手動で確認します。
+## 開発・運用の知見
+
+開発環境、内部構成、検証コマンドと運用上の注意は [findings.md](findings.md) を参照してください。更新・復旧の手順と検証記録は、同ファイルから案内しています。
