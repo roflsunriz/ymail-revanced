@@ -1,5 +1,11 @@
 # 検証記録
 
+## 2026-10-19: CI高速化
+
+- 変更したGitHub Actionsをactionlint 1.7.12で検査し、エラー0件を確認した。
+- GitHub上の未解決Dependabot更新PRと依存脆弱性アラートがともに0件であることを確認した。
+- Android SDKを明示し、CIと同じGradleタスクへ`--parallel --build-cache --dry-run`を指定してタスクグラフ生成が成功した。
+
 ## 自動テスト
 
 - 広告ホスト判定がYahoo!メール本体の`mail.yahoo.co.jp`を誤遮断しない
