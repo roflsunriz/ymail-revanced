@@ -1,5 +1,11 @@
 # 更新手順
 
+## ReVanced Manager向けJSONの配布
+
+登録用URLは `https://raw.githubusercontent.com/roflsunriz/ymail-revanced/main/patches.json` です。
+
+release workflowは、リリースの公開に成功した後、生成した `patches.json` を既定ブランチへ同期します。最新リリース以外の再実行では同期せず、JSONの版不一致や同時更新を検出した場合は失敗します。失敗時は最新リリースのJSONと既定ブランチの差分を確認し、最新のJSONだけを再反映してください。RVPの配布先はGitHub Releasesのままです。
+
 作業前に [findings.md](findings.md) を全文読み、固有の環境・ツール・例外条件を確認する。以下は更新と復旧の手順の正本とする。
 
 

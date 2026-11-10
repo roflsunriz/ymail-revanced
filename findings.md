@@ -1,5 +1,7 @@
 # 調査知見
 
+- Manager登録用のraw URLは既定ブランチ直下の `patches.json` を読む。release workflowの最後で、最新リリースのJSONだけを同ブランチへ同期する。旧リリース再実行は更新対象外で、JSONの版と現在のblob SHAを検証するため、URLだけを変更してJSON配置・同期を省略しない。
+
 - `MailListAdViewContainer` は選択モード変更時の再bindで高さと可視性が戻る。`OnGlobalLayout` の再collapseだけでは一覧アニメーションを防げないため、`AdViewLayoutPatch.kt` で測定寸法を0に保つ。6.1.1、6.2.5、6.2.18で同じ構造を確認済み。
 - `WebView.loadUrl` の書換えでは `invoke-super` を維持する。仮想呼出しのラッパーへ置換すると広告WebViewのoverrideへ再入し、Runnable再投入ループを起こし得る。URL引数だけを変換する。
 - ReVanced Managerでは同名・同版のローカルRVPと公開版が別ソースとして並ぶ。検証時は1ソースだけを選び、保存APKのDEXに修正が入ったことを確認してからインストールする。表示順で判定しない。
